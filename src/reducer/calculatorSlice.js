@@ -7,6 +7,14 @@ const initialState = {
   waitingForOperand: false,
 };
 
+const CalculatorOperations = {
+  "/": (prevValue, nextValue) => prevValue / nextValue,
+  "*": (prevValue, nextValue) => prevValue * nextValue,
+  "+": (prevValue, nextValue) => prevValue + nextValue,
+  "-": (prevValue, nextValue) => prevValue - nextValue,
+  "=": (prevValue, nextValue) => nextValue,
+};
+
 export const calculatorSlice = createSlice({
   name: "calculator",
   initialState,
@@ -62,40 +70,12 @@ export const calculatorSlice = createSlice({
         state.value = inputValue;
       } else if (state.operator) {
         const currentValue = state.value || 0;
-
-        switch (action.payload) {
-          case "+": {
-            const newValue = currentValue + inputValue;
-            state.value = newValue;
-            state.displayValue = String(newValue);
-            break;
-          }
-          case "-": {
-            const newValue = currentValue - inputValue;
-            state.value = newValue;
-            state.displayValue = String(newValue);
-            break;
-          }
-          case "*": {
-            const newValue = currentValue * inputValue;
-            state.value = newValue;
-            state.displayValue = String(newValue);
-            break;
-          }
-          case "/": {
-            const newValue = currentValue / inputValue;
-            state.value = newValue;
-            state.displayValue = String(newValue);
-            break;
-          }
-          case "=": {
-            state.displayValue = String(currentValue);
-            break;
-          }
-          default: {
-            break;
-          }
-        }
+        const newValue = CalculatorOperations[state.operator](
+          currentValue,
+          inputValue
+        );
+        state.value = newValue;
+        state.displayValue = String(newValue);
       }
       state.waitingForOperand = true;
       state.operator = action.payload;
