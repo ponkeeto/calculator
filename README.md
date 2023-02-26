@@ -1,2 +1,2 @@
 # calculator
-a simple calculator app that uses ReactJs, React hooks, and material UI to create it web and mobile responsive.
+a simple calculator app that uses ReactJs, Redux toolkit for state management, and material UI to make it web and mobile responsive.
