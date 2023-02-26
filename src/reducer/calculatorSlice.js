@@ -1,41 +1,53 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  input: "0",
-  operand: "",
-  variables: [],
-  output: 0,
+  displayValue: "0",
+  operator: null,
+  value: null,
+  waitingForOperand: false,
 };
 
 export const calculatorSlice = createSlice({
   name: "calculator",
   initialState,
   reducers: {
-    inputValue: (state, action) => {
-      if (state.input === "0") {
-        state.input = action.payload;
+    inputNumber: (state, action) => {
+      if (state.waitingForOperand) {
+        state.displayValue = String(action.payload);
+        state.waitingForOperand = false;
       } else {
-        state.input = state.input.concat(action.payload);
+        state.displayValue =
+          state.displayValue === "0"
+            ? String(action.payload)
+            : state.displayValue + action.payload;
+      }
+    },
+    inputDec: (state) => {
+      if (!state.displayValue.includes(".")) {
+        state.displayValue = state.displayValue.concat(".");
+        state.waitingForOperand = false;
       }
     },
     auxActions: (state, action) => {
       switch (action.payload) {
         case "+/-": {
-          if (state.input.startsWith("-")) {
-            state.input = state.input.slice(1);
-          } else {
-            state.input = String("-").concat(state.input);
-          }
+          const newValue = parseFloat(state.displayValue) * -1;
+          state.displayValue = String(newValue);
           break;
         }
         case "%": {
+          const currentValue = parseFloat(state.displayValue);
+
+          if (currentValue === 0) return;
+          const newValue = parseFloat(state.displayValue) / 100;
+          state.displayValue = String(newValue);
           break;
         }
         case "AC": {
-          state.input = "0";
-          state.operand = "";
-          state.variables = [];
-          state.output = 0;
+          state.displayValue = "0";
+          state.operator = null;
+          state.value = null;
+          state.waitingForOperand = false;
           break;
         }
         default: {
@@ -44,43 +56,54 @@ export const calculatorSlice = createSlice({
       }
     },
     calculateValues: (state, action) => {
-      switch (state.operand) {
-        case "+": {
-          state.output = state.variables.reduce(
-            (accumulator, currentValue) => accumulator + currentValue
-          );
-          break;
-        }
-        case "-": {
-          state.output = state.variables.reduce(
-            (accumulator, currentValue) => accumulator - currentValue
-          );
-          break;
-        }
-        case "*": {
-          state.output = state.variables.reduce(
-            (accumulator, currentValue) => accumulator * currentValue
-          );
-          break;
-        }
-        case "/": {
-          state.output = state.variables.reduce(
-            (accumulator, currentValue) => accumulator / currentValue
-          );
-          break;
-        }
-        default: {
-          state.operand = action.payload;
-          state.variables.push(Number(state.input));
+      const inputValue = parseFloat(state.displayValue);
 
-          break;
+      if (!state.value) {
+        state.value = inputValue;
+      } else if (state.operator) {
+        const currentValue = state.value || 0;
+
+        switch (action.payload) {
+          case "+": {
+            const newValue = currentValue + inputValue;
+            state.value = newValue;
+            state.displayValue = String(newValue);
+            break;
+          }
+          case "-": {
+            const newValue = currentValue - inputValue;
+            state.value = newValue;
+            state.displayValue = String(newValue);
+            break;
+          }
+          case "*": {
+            const newValue = currentValue * inputValue;
+            state.value = newValue;
+            state.displayValue = String(newValue);
+            break;
+          }
+          case "/": {
+            const newValue = currentValue / inputValue;
+            state.value = newValue;
+            state.displayValue = String(newValue);
+            break;
+          }
+          case "=": {
+            state.displayValue = String(currentValue);
+            break;
+          }
+          default: {
+            break;
+          }
         }
       }
+      state.waitingForOperand = true;
+      state.operator = action.payload;
     },
   },
 });
 
-export const { inputValue, auxActions, calculateValues } =
+export const { inputNumber, inputDec, auxActions, calculateValues } =
   calculatorSlice.actions;
 
 export default calculatorSlice.reducer;

@@ -7,7 +7,6 @@ const AuxButton = (props) => {
   const { value } = props;
   const dispatch = useDispatch();
   const handleOnClick = (e) => {
-    console.log(e.target.value);
     dispatch(auxActions(e.target.value))
   };
   return (
