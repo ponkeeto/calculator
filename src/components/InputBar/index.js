@@ -1,14 +1,11 @@
 import React from "react";
-import { TextField } from "@mui/material";
+import { Typography } from "@mui/material";
+import { useSelector } from "react-redux";
 
-const InputBar = (props) => {
+const InputBar = () => {
+  const input = useSelector((state) => state.calculator.input);
   return (
-    <TextField
-      disabled
-      fullWidth
-      defaultValue="Hello World"
-      variant="filled"
-    />
+    <Typography textAlign="right" variant="h3">{input}</Typography>
   );
 };
 

@@ -19,7 +19,7 @@ function App() {
           <Grid item container>
             {aux.map((value) => {
               return (
-                <Grid item xs={4}>
+                <Grid item xs={4} key={value}>
                   <AuxButton value={value} />
                 </Grid>
               );
@@ -28,7 +28,7 @@ function App() {
           <Grid item container>
             {values.map((value) => {
               return (
-                <Grid item xs={value === "0" ? 8 : 4}>
+                <Grid item xs={value === "0" ? 8 : 4} key={value}>
                   <NumButton value={value} />
                 </Grid>
               );
@@ -39,7 +39,7 @@ function App() {
           <Grid item container>
             {operations.map((value) => {
               return (
-                <Grid item xs={12}>
+                <Grid item xs={12} key={value}>
                   <OperButton value={value} />
                 </Grid>
               );
