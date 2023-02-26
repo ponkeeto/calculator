@@ -1,23 +1,52 @@
-import logo from './logo.svg';
-import './App.css';
+import { Grid } from "@mui/material";
+import "./App.css";
+import AuxButton from "./components/AuxButton";
+import InputBar from "./components/InputBar";
+import NumButton from "./components/NumButton";
+import OperButton from "./components/OperButton";
 
 function App() {
+  const values = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."];
+  const aux = ["AC", "+/-", "%"];
+  const operations = ["/", "*", "-", "+", "="];
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Grid container style={{ width: "75%", margin: "20px auto" }}>
+        <Grid item xs={12}>
+          <InputBar />
+        </Grid>
+        <Grid item container xs={9}>
+          <Grid item container>
+            {aux.map((value) => {
+              return (
+                <Grid item xs={4}>
+                  <AuxButton value={value} />
+                </Grid>
+              );
+            })}
+          </Grid>
+          <Grid item container>
+            {values.map((value) => {
+              return (
+                <Grid item xs={value === "0" ? 8 : 4}>
+                  <NumButton value={value} />
+                </Grid>
+              );
+            })}
+          </Grid>
+        </Grid>
+        <Grid item container xs={3}>
+          <Grid item container>
+            {operations.map((value) => {
+              return (
+                <Grid item xs={12}>
+                  <OperButton value={value} />
+                </Grid>
+              );
+            })}
+          </Grid>
+        </Grid>
+      </Grid>
     </div>
   );
 }
