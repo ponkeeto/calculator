@@ -11,7 +11,7 @@ function App() {
   const operations = ["/", "*", "-", "+", "="];
   return (
     <div className="App">
-      <Grid container style={{ width: "75%", margin: "20px auto" }}>
+      <Grid container style={{ width: "80%", margin: "20px auto" }}>
         <Grid item xs={12}>
           <InputBar />
         </Grid>
